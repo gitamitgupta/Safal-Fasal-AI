@@ -1,26 +1,28 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Header from "./components/Header";
-import Home from "./pages/Home";
-import Profile from "./pages/Profile";
-import SoilStatus from "./pages/SoilStatus";
-import Feedback from "./pages/Feedback";
-import CurrentCrop from "./pages/CurrentCrop";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header'; // Assuming Header.jsx is in a components folder
+import HomePage from './pages/HomePage';
+import ProfilePage from './pages/Profile';
+import FaqsPage from './pages/FAQs';
+import CropDiseasePage from './pages/CropDiseasePage';
+import PredictCropPage from './pages/CropPredict';
 
-function App() {
+const App = () => {
   return (
-    <>
-      <Header />
-      <Routes>
-  <Route path="/" element={<Navigate to="/home" replace />} />
-  <Route path="/home" element={<Home />} />
-  <Route path="/profile" element={<Profile />} />
-  <Route path="/soil-status" element={<SoilStatus />} />
-  <Route path="/feedback" element={<Feedback />} />
-  <Route path="/current-crop" element={<CurrentCrop />} />
-</Routes>
-
-    </>
+    <Router>
+      <div className="App">
+        {/* The Header component is placed outside of Routes to appear on all pages */}
+        <Header /> 
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/faqs" element={<FaqsPage />} />
+          <Route path="/crop-disease" element={<CropDiseasePage />} />
+          <Route path="/predict-crop" element={<PredictCropPage />} />
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
