@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
-// Placeholder images for the slideshow
+// ... (import images and other components)
 import image1 from '../assets/images/f1.jpg';
 import image2 from '../assets/images/f2.jpg';
 import image3 from '../assets/images/f3.jpg';
@@ -12,7 +13,9 @@ import ErrorBoundary from '../components/ErrorBoundary';
 
 const images = [image1, image2, image3, image4, image5];
 
+
 const HomePage = ({ dashboardData }) => {
+  const { t } = useTranslation();
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const nextSlide = () => {
@@ -22,6 +25,7 @@ const HomePage = ({ dashboardData }) => {
   const prevSlide = () => {
     setCurrentSlide((prevSlide) => (prevSlide - 1 + images.length) % images.length);
   };
+// ... (rest of your HomePage component)
 
   // Dummy data for the dashboard with all required properties
   const dummyDashboardData = {
@@ -46,6 +50,7 @@ const HomePage = ({ dashboardData }) => {
   // Use the dummy data or the data passed from props if available
   const finalDashboardData = dashboardData || dummyDashboardData;
 
+
   return (
     <div className="min-h-screen bg-gray-100 font-sans">
     
@@ -68,8 +73,8 @@ const HomePage = ({ dashboardData }) => {
 
       {/* Introduction Section */}
       <section className="container mx-auto mt-8 px-6 text-center">
-        <h2 className="text-4xl font-bold text-gray-800 mb-4">Welcome Kishore Ji!</h2>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">Your one-stop solution for modern agriculture. Use our tools to get insights, diagnose crop diseases, and predict the best crops for your farm.</p>
+        <h2 className="text-4xl font-bold text-gray-800 mb-4">{t('welcome')}</h2>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t('welcome_message')}</p>
       </section>
 
       {/* Dashboard Section */}
