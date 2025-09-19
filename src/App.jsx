@@ -9,14 +9,15 @@ import ProfilePage from "./pages/Profile";
 import FaqsPage from "./pages/FAQs";
 import CropDiseasePage from "./pages/CropDiseasePage";
 import PredictCropPage from "./pages/CropPredict";
-
+import LoginPage from "./pages/LoginPage";
+import YieldPredictionPage from "./pages/YieldPerdiction";
 // 🔹 PrivateRoute component (Step 8)
-const PrivateRoute = ({ user, children }) => {
-  if (user === null) {
-    // still checking auth
-    return <div>Loading...</div>;
+const PrivateRoute = ({ children }) => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return <Navigate to="/login" replace />;
   }
-  return user ? children : <Navigate to="/" replace />; // redirect to home if not logged in
+  return children;
 };
 
 const App = () => {
@@ -39,10 +40,12 @@ const App = () => {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage dashboardData={dashboardData} />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route
             path="/predict-crop"
             element={<PredictCropPage setDashboardData={setDashboardData} />}
           />
+        <Route path="/predict-yield" element={<YieldPredictionPage />} />
           <Route path="/faqs" element={<FaqsPage />} />
           <Route path="/crop-disease" element={<CropDiseasePage />} />
 
@@ -50,7 +53,7 @@ const App = () => {
           <Route
             path="/profile"
             element={
-              <PrivateRoute user={user}>
+              <PrivateRoute>
                 <ProfilePage />
               </PrivateRoute>
             }

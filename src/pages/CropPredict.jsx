@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import f2 from '../assets/images/Farmer-cuate.png'
+import f2 from '../assets/images/Farmer-cuate.png';
 
 const PredictCropPage = () => {
   const [userLocation, setUserLocation] = useState(null);
@@ -13,19 +13,64 @@ const PredictCropPage = () => {
   const [showInstructions, setShowInstructions] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  // Dummy function to simulate fetching weather and soil data
-  const fetchEnvironmentalData = (lat, lon) => {
-    setWeatherData({
-      temperature: 25, // in Celsius
-      rainfall: 150, // in mm
-      humidity: 75, // in %
-    });
-    setSoilData({
-      nitrogen: 120, // NPK values in kg/ha
-      phosphorus: 50,
-      potassium: 80,
-    });
+  const fetchCropPrediction = async (lat, lon) => {
+    setLoading(true);
+    setErrorMessage(null);
+    try {
+      // **Replace with your actual backend URL**
+      const response = await fetch(`https://new-bckend-safalfasal.onrender.com/api/v1/data/crop-yield?lat=${lat}&lon=${lon}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      const { inputData, prediction } = data.data;
+
+      setWeatherData({
+        temperature: inputData.temperature,
+        rainfall: inputData.rainfall,
+        humidity: inputData.humidity,
+      });
+      setSoilData({
+        nitrogen: inputData.N,
+        phosphorus: 50, // Placeholder, as this is not in the API response
+        potassium: 80, // Placeholder, as this is not in the API response
+        ph: inputData.ph,
+      });
+
+      const formattedPredictions = prediction.predictions.map(p => ({
+        name: `${p.crop.charAt(0).toUpperCase() + p.crop.slice(1)}`,
+        confidence: `${(p.probability * 100).toFixed(2)}%`,
+        // Dummy data for yield and price, as this is not in the prediction response
+        yield: "40-50 quintals/hectare",
+        yieldPercentage: Math.round(p.probability * 100),
+        price: "₹1,850 per quintal",
+      }));
+
+      setPredictedCrops(formattedPredictions);
+    } catch (error) {
+      console.error("Failed to fetch crop prediction:", error);
+      setErrorMessage("Failed to fetch crop prediction. Using hardcoded data as a fallback.");
+      // Fallback to hardcoded data on error
+      setWeatherData({
+        temperature: 25,
+        rainfall: 150,
+        humidity: 75,
+      });
+      setSoilData({
+        nitrogen: 120,
+        phosphorus: 50,
+        potassium: 80,
+      });
+      setPredictedCrops([
+        { name: "Rice 🌾", confidence: "92%", yield: "50-60 quintals/hectare", yieldPercentage: 85, price: "₹2,125 per quintal" },
+        { name: "Maize 🌽", confidence: "85%", yield: "40-50 quintals/hectare", yieldPercentage: 70, price: "₹1,850 per quintal" },
+        { name: "Wheat 🌾", confidence: "78%", yield: "30-40 quintals/hectare", yieldPercentage: 60, price: "₹2,200 per quintal" },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   const getCurrentLocation = () => {
     setErrorMessage(null);
@@ -34,11 +79,9 @@ const PredictCropPage = () => {
         (position) => {
           const { latitude, longitude } = position.coords;
           setUserLocation({ latitude, longitude });
-          fetchEnvironmentalData(latitude, longitude);
           setShowInstructions(false);
         },
         (error) => {
-          // Log a more descriptive error message to the console
           console.error("Error getting location: Please enable location services.", error);
           setErrorMessage("Could not get your location. Please enable location services and try again.");
         }
@@ -49,23 +92,9 @@ const PredictCropPage = () => {
   };
 
   const runPredictionModel = () => {
-    setLoading(true);
-    setPredictedCrops([]);
-    setSelectedCrop(null);
-    setYieldData(null);
-    setMarketPrice(null);
-
-    // This is where a real ML model API would be called.
-    setTimeout(() => {
-      // Dummy prediction logic returning multiple crops
-      const predictions = [
-        { name: "Rice 🌾", confidence: "92%", yield: "50-60 quintals/hectare", yieldPercentage: 85, price: "₹2,125 per quintal" },
-        { name: "Maize 🌽", confidence: "85%", yield: "40-50 quintals/hectare", yieldPercentage: 70, price: "₹1,850 per quintal" },
-        { name: "Wheat 🌾", confidence: "78%", yield: "30-40 quintals/hectare", yieldPercentage: 60, price: "₹2,200 per quintal" },
-      ];
-      setPredictedCrops(predictions);
-      setLoading(false);
-    }, 2000); // Simulate a 2-second delay
+    if (userLocation) {
+      fetchCropPrediction(userLocation.latitude, userLocation.longitude);
+    }
   };
 
   const selectCrop = (crop) => {
@@ -92,7 +121,7 @@ const PredictCropPage = () => {
     const radius = 50;
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
-  
+
     return (
       <div className="relative w-28 h-28 flex mt-14 items-center justify-center">
         <svg className="w-full h-full mt-14" viewBox="0 0 120 120">
@@ -129,7 +158,7 @@ const PredictCropPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800 p-4 sm:p-6 md:p-12">
       <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 max-w-6xl mx-auto">
-        
+
         {/* Header and Intro Section */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-8 md:mb-12">
           <div className="text-center md:text-left">
@@ -141,10 +170,10 @@ const PredictCropPage = () => {
             </p>
           </div>
           <div className="hidden md:flex justify-center">
-            <img 
+            <img
               src={f2}
-              alt="Illustration of a farmer using a crop prediction tool." 
-              className="rounded-lg shadow-md w-full max-w-sm" 
+              alt="Illustration of a farmer using a crop prediction tool."
+              className="rounded-lg shadow-md w-full max-w-sm"
             />
           </div>
         </section>
@@ -181,13 +210,13 @@ const PredictCropPage = () => {
               Get My Current Location
             </button>
           </div>
-          
+
           {/* Error Message Display */}
-          {errorMessage && (
+          {/* {errorMessage && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl relative mb-6" role="alert">
               <span className="block sm:inline">{errorMessage}</span>
             </div>
-          )}
+          )} */}
 
           {/* Display fetched data with enhanced UI */}
           {userLocation && (
@@ -266,7 +295,7 @@ const PredictCropPage = () => {
               {loading ? 'Analyzing Data...' : 'Predict Crop'}
             </button>
           </div>
-          
+
           {loading && (
             <div className="mt-8 flex justify-center items-center">
               <span className="text-4xl text-blue-500 animate-pulse">⚙️</span>
@@ -282,8 +311,8 @@ const PredictCropPage = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {predictedCrops.map((crop, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     onClick={() => selectCrop(crop)}
                     className={`bg-white rounded-xl shadow-lg p-6 flex flex-col items-center cursor-pointer transition-transform transform hover:scale-105 border-4 ${selectedCrop?.name === crop.name ? 'border-green-500' : 'border-transparent'}`}
                   >

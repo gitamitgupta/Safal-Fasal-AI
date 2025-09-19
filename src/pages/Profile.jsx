@@ -99,10 +99,9 @@ export default function Profile() {
     }
   };
 
-  const handleLogout = async () => {
-    setAppLoading(true);
-    await signOut(auth);
-    setAppLoading(false);
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
   };
 
   // Upload profile picture
