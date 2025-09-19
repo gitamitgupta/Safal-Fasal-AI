@@ -8,9 +8,9 @@ const faqsData = [
     keywords: ["wheat", "planting time", "north india"]
   },
   {
-    question: "How can I check my soil's nitrogen levels?",
-    answer: "You can use a home soil testing kit, or for more accurate results, send a soil sample to a local agricultural laboratory. This gives you precise data on nitrogen, phosphorus, and potassium levels.",
-    keywords: ["soil", "nitrogen", "testing"]
+    question: "I am new to farming. Can this website help me choose the right crops?",
+    answer: "Our website is a great tool for both new and experienced farmers. By providing your location and land details, our system analyses regional data to recommend crops that suit your soil and climate.",
+    keywords: ["new", "farming", "right"]
   },
   {
     question: "What are the common diseases of potatoes?",

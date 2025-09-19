@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import farm1 from '../assets/images/File searching-cuate.png';
 
 // The following imports have been replaced with emojis and placeholder images to ensure the component is self-contained and compiles correctly.
 // import { FaUpload, FaLeaf, FaMicroscope } from 'react-icons/fa';
@@ -73,7 +74,7 @@ const CropDiseasePage = () => {
             </div>
           </div>
           <div className="hidden md:flex justify-center">
-             <img src="https://placehold.co/400x300/F0F3E8/335C33?text=Diagnosis" alt="An illustration of a person using an app to diagnose a crop disease." className="rounded-lg shadow-md w-full max-w-sm" />
+             <img src={farm1} alt="An illustration of a person using an app to diagnose a crop disease." className="rounded-lg shadow-md w-full max-w-sm" />
           </div>
         </section>
 
