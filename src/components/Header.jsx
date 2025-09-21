@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaSeedling, FaBars, FaTimes } from 'react-icons/fa';
+import { FaSeedling, FaBars, FaTimes, FaRupeeSign } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 
 const Header = () => {
@@ -42,6 +42,12 @@ const Header = () => {
                 <ul className="hidden md:flex space-x-8 text-gray-700 font-medium">
                     <li><NavLink to="/" className={desktopLinkClasses} style={getActiveStyle}>Home</NavLink></li>
                     <li><NavLink to="/profile" className={desktopLinkClasses} style={getActiveStyle}>Profile</NavLink></li>
+                    <li>
+                        <NavLink to="/market-prices" className={`${desktopLinkClasses} flex items-center space-x-1`} style={getActiveStyle}>
+                            <FaRupeeSign size={14} />
+                            <span>Market Prices</span>
+                        </NavLink>
+                    </li>
                     <li><NavLink to="/faqs" className={desktopLinkClasses} style={getActiveStyle}>FAQs</NavLink></li>
                     <li><NavLink to="/crop-disease" className={desktopLinkClasses} style={getActiveStyle}>Crop Disease</NavLink></li>
                     <li><NavLink to="/predict-crop" className={desktopLinkClasses} style={getActiveStyle}>Predict Crop</NavLink></li>
@@ -61,6 +67,12 @@ const Header = () => {
                     <ul className="flex flex-col space-y-4 px-6 text-gray-700 font-medium">
                         <li><NavLink to="/" className={mobileLinkClasses} style={getActiveStyle} onClick={toggleMenu}>Home</NavLink></li>
                         <li><NavLink to="/profile" className={mobileLinkClasses} style={getActiveStyle} onClick={toggleMenu}>Profile</NavLink></li>
+                        <li>
+                            <NavLink to="/market-prices" className={`${mobileLinkClasses} flex items-center space-x-2`} style={getActiveStyle} onClick={toggleMenu}>
+                                <FaRupeeSign size={14} />
+                                <span>Market Prices</span>
+                            </NavLink>
+                        </li>
                         <li><NavLink to="/faqs" className={mobileLinkClasses} style={getActiveStyle} onClick={toggleMenu}>FAQs</NavLink></li>
                         <li><NavLink to="/crop-disease" className={mobileLinkClasses} style={getActiveStyle} onClick={toggleMenu}>Crop Disease</NavLink></li>
                         <li><NavLink to="/predict-crop" className={mobileLinkClasses} style={getActiveStyle} onClick={toggleMenu}>Predict Crop</NavLink></li>
