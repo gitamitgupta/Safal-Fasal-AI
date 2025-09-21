@@ -11,6 +11,8 @@ import CropDiseasePage from "./pages/CropDiseasePage";
 import PredictCropPage from "./pages/CropPredict";
 import LoginPage from "./pages/LoginPage";
 import YieldPredictionPage from "./pages/YieldPerdiction";
+import MarketPricePage from "./pages/MarketPricePage";
+
 // 🔹 PrivateRoute component (Step 8)
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem('token');
@@ -40,12 +42,13 @@ const App = () => {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage dashboardData={dashboardData} />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route
             path="/predict-crop"
             element={<PredictCropPage setDashboardData={setDashboardData} />}
           />
-        <Route path="/predict-yield" element={<YieldPredictionPage />} />
+          <Route path="/predict-yield" element={<YieldPredictionPage />} />
+          <Route path="/market-prices" element={<MarketPricePage />} />
           <Route path="/faqs" element={<FaqsPage />} />
           <Route path="/crop-disease" element={<CropDiseasePage />} />
 
